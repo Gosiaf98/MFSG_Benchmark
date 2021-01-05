@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <form>
+        <div class="row">
+            <div class="col-1"></div>
+            <div class="col-4">
+                {{ form.path|as_crispy_field }}
+                <div class="font-weight-bold mb-3">Wybierz miary, które chcesz porównać:</div>
+                {{ form.dom|as_crispy_field }}
+                {{ form.first_byte|as_crispy_field }}
+            </div>
+            <div class="col-1"></div>
+            <div class="col-4">
+
+            </div>
+            <div class="col-2"></div>
+        </div>
+        
+    </form>
+{% endblock %}
