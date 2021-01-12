@@ -21,6 +21,7 @@ class Form(SuccessMessageMixin, forms.ModelForm):
     dom = forms.BooleanField(required=False)
     first_byte = forms.BooleanField(required=False)
 
+    sites = Site.objects.all()
     SITES_TO_COMPARE = (
         ("1", "One"),
         ("2", "Two"),
@@ -28,7 +29,7 @@ class Form(SuccessMessageMixin, forms.ModelForm):
         ("4", "Four"),
         ("5", "Five"),
     )
-    compare_sites = forms.MultipleChoiceField(widget=forms.SelectMultiple, choices=SITES_TO_COMPARE, label="<b>Wybierz strony, z którymi chcesz się porównać:</b>", required=False)
+    compare_sites = forms.ModelMultipleChoiceField(widget=forms.SelectMultiple, queryset=sites, label="<b>Wybierz strony, z którymi chcesz się porównać:</b>", required=False)
 
     def __init__(self, *args, **kwargs):
         super(Form, self).__init__(*args, **kwargs)
@@ -77,7 +78,7 @@ class Form(SuccessMessageMixin, forms.ModelForm):
             site.dom = total_time
             site.first_byte = first_byte_time
             site.save()
-            self.driver.close()
+            #self.driver.close()
             return site
 
         return -1
