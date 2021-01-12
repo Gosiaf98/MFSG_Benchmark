@@ -29,7 +29,7 @@ class Form(SuccessMessageMixin, forms.ModelForm):
         ("4", "Four"),
         ("5", "Five"),
     )
-    compare_sites = forms.ModelMultipleChoiceField(widget=forms.SelectMultiple, queryset=sites, label="<b>Wybierz strony, z którymi chcesz się porównać:</b>", required=False)
+    compare_sites = forms.ModelMultipleChoiceField(widget=forms.SelectMultiple, queryset=sites, label="<b>Wybierz strony, z którymi chcesz się porównać:</b>", required=False, help_text="Przytrzymaj CTRL, aby zaznaczyć więcej niż jedną stronę.")
 
     def __init__(self, *args, **kwargs):
         super(Form, self).__init__(*args, **kwargs)
@@ -48,6 +48,19 @@ class Form(SuccessMessageMixin, forms.ModelForm):
 
         return total_time, first_byte_time
 
+    def clean_path(self):
+        path = self.cleaned_data.get('path')
+
+        try:
+            self.driver.get(path)
+        except:
+            raise forms.ValidationError(
+                self.error_messages['path_incorrect'],
+                code='path_incorrect'
+            )
+
+        return path
+
     def clean(self):
         cleaned_data = super(Form, self).clean()
 
@@ -60,8 +73,6 @@ class Form(SuccessMessageMixin, forms.ModelForm):
             )
 
         return cleaned_data
-
-        #TODO sprawdzić, czy istnieje strona o takim adresie
 
     def save(self, commit=True):
         print("save")
