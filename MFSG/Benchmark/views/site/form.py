@@ -4,7 +4,6 @@ from django.utils.translation import ugettext_lazy as _
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 
-
 from ...models import Site
 
 
@@ -90,6 +89,7 @@ class Form(SuccessMessageMixin, forms.ModelForm):
             site.first_byte = first_byte_time
             site.save()
             #self.driver.close()
+
             return site
 
         return -1
