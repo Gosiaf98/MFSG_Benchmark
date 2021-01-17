@@ -21,13 +21,7 @@ class Form(SuccessMessageMixin, forms.ModelForm):
     first_byte = forms.BooleanField(required=False)
 
     sites = Site.objects.all()
-    SITES_TO_COMPARE = (
-        ("1", "One"),
-        ("2", "Two"),
-        ("3", "Three"),
-        ("4", "Four"),
-        ("5", "Five"),
-    )
+
     compare_sites = forms.ModelMultipleChoiceField(widget=forms.SelectMultiple, queryset=sites, label="<b>Wybierz strony, z którymi chcesz się porównać:</b>", required=False, help_text="Przytrzymaj CTRL, aby zaznaczyć więcej niż jedną stronę.")
 
     def __init__(self, *args, **kwargs):

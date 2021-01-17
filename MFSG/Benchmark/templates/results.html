@@ -3,4 +3,33 @@
 {% block content %}
     {% load static %}
 
+    <h1 class="text-center">{{title}}</h1>
+    <div class="text-center"> Wyniki pomiarów </div>
+
+    {% if compare %}
+
+    {% else %}
+
+        <div class="row">
+            <div class="col-3"></div>
+
+            <div class="mt-5 p-3 col-6">
+                {% if dom %}
+                    <div class="m-2"> <b>Dom: </b>{{dom}} ms<br></div>
+                {% endif %}
+                {% if first_byte %}
+                    <div class="m-2"><b>First Byte: </b>{{first_byte}} ms</div>
+                {% endif %}
+
+            </div>
+
+            <div class="col-3"></div>
+        </div>
+
+    {% endif %}
+    <div class="row">
+        <div class="col-5"></div>
+        <a type="button" class="btn btn-success mt-5 ml-5 col-1" href="">Powrót</a>
+        <div class="col-6"></div>
+    </div>
 {% endblock %}
