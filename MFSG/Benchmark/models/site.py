@@ -7,6 +7,7 @@ class Site(models.Model):
     path = models.CharField(max_length=200)
     dom = models.IntegerField(default=0)
     first_byte = models.IntegerField(default=0)
+    interactive = models.IntegerField(default=0)
 
     def __str__(self):
         return self.title

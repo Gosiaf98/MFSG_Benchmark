@@ -7,18 +7,27 @@
     <div class="text-center"> Wyniki pomiarów </div>
 
     {% if compare %}
-
+        <div class="row mt-5">
+            <div class="col-1"></div>
+            <div class="col-10">
+                {{ uri|safe }}
+            </div>
+            <div class="col-1"></div>
+        </div>
     {% else %}
 
         <div class="row">
             <div class="col-3"></div>
 
             <div class="mt-5 p-3 col-6">
-                {% if dom %}
-                    <div class="m-2"> <b>Dom: </b>{{dom}} ms<br></div>
-                {% endif %}
                 {% if first_byte %}
-                    <div class="m-2"><b>First Byte: </b>{{first_byte}} ms</div>
+                    <div class="m-2"><b>Time to First Byte: </b>{{first_byte}} ms</div>
+                {% endif %}
+                {% if interactive %}
+                    <div class="m-2"><b>Time to Interactive: </b>{{interactive}} ms</div>
+                {% endif %}
+                {% if dom %}
+                    <div class="m-2"> <b>DOM Complete Time: </b>{{dom}} ms<br></div>
                 {% endif %}
 
             </div>
@@ -29,7 +38,7 @@
     {% endif %}
     <div class="row">
         <div class="col-5"></div>
-        <a type="button" class="btn btn-success mt-5 ml-5 col-1" href="">Powrót</a>
+        <a type="button" class="btn btn-success mt-5 ml-5 mb-3 col-1" href="">Powrót</a>
         <div class="col-6"></div>
     </div>
 {% endblock %}
