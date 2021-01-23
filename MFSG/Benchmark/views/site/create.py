@@ -7,6 +7,7 @@ matplotlib.use('Agg') #<= this is required
 from matplotlib import pyplot as plt
 import io
 import urllib, base64
+from pylab import *
 
 class Create(CreateView):
     template_name = "site_create.html"
@@ -16,6 +17,7 @@ class Create(CreateView):
     def form_valid(self, form):
         self.object = form.save()
         return self.results(self.request, self.object, form)
+
 
     def results(self, request, site, form):
         data = {'title': site.title}
@@ -34,16 +36,21 @@ class Create(CreateView):
             data['compare'] = True
 
             i = 11
+            figLen = 0
             if form.cleaned_data['dom']:
                 i += 100
+                figLen += 5
             if form.cleaned_data['first_byte']:
                 i += 100
+                figLen += 5
             if form.cleaned_data['interactive']:
                 i += 100
+                figLen += 5
 
-            fig = plt.figure(figsize=(10, 15))
+            fig = plt.figure(figsize=(10, figLen))
 
-            plt.subplot(i)
+            ax = plt.subplot(i)
+            x = np.arange(len(form.cleaned_data['compare_sites']) + 1)
 
             colors = ['orange', 'green', 'blue', 'red', 'purple', 'brown', 'pink', 'gray', 'olive', 'cyan']
 
@@ -56,7 +63,8 @@ class Create(CreateView):
                 for c_site in form.cleaned_data['compare_sites']:
                     titles.append(c_site.title)
                     first_bytes.append(c_site.first_byte)
-                bar = plt.bar(titles, first_bytes, color=colors)
+                bar = plt.bar(x, first_bytes, color=colors)
+                plt.xticks([])
                 plt.title("Time to First Byte")
                 plt.ylabel('Czas [ms]')
 
@@ -65,7 +73,7 @@ class Create(CreateView):
                     plt.text(rect.get_x() + rect.get_width() / 2.0, height, '%d' % int(height), ha='center', va='bottom')
 
                 i += 1
-                plt.subplot(i)
+
 
             if form.cleaned_data['interactive']:
                 titles = []
@@ -76,7 +84,9 @@ class Create(CreateView):
                 for c_site in form.cleaned_data['compare_sites']:
                     titles.append(c_site.title)
                     interactives.append(c_site.interactive)
-                bar = plt.bar(titles, interactives, color=colors)
+                plt.subplot(i)
+                bar = plt.bar(x, interactives, color=colors)
+                plt.xticks([])
                 plt.title("Time to Interactive")
                 plt.ylabel('Czas [ms]')
 
@@ -86,7 +96,6 @@ class Create(CreateView):
 
 
                 i += 1
-                plt.subplot(i)
 
             if form.cleaned_data['dom']:
                 titles = []
@@ -97,7 +106,9 @@ class Create(CreateView):
                 for c_site in form.cleaned_data['compare_sites']:
                     titles.append(c_site.title)
                     doms.append(c_site.dom)
-                bar = plt.bar(titles, doms, color=colors)
+                plt.subplot(i)
+                bar = plt.bar(x, doms, color=colors)
+                plt.xticks([])
                 plt.title("DOM Complete Time")
                 plt.ylabel('Czas [ms]')
 
@@ -105,7 +116,8 @@ class Create(CreateView):
                     height = rect.get_height()
                     plt.text(rect.get_x() + rect.get_width() / 2.0, height, '%d' % int(height), ha='center', va='bottom')
 
-
+            figlegend((bar), titles, bbox_to_anchor=(0.1, 0.92, 0.8, .102), loc='lower left', mode="expand",
+                      borderaxespad=0.)
 
             buf = io.StringIO()
             fig.savefig(buf, format='svg', bbox_inches='tight')
